@@ -1,0 +1,7 @@
+    torch
+    numpy
+    einops
+    hparams
+    matplotlib
+    tensorboard
+    matplotlib
