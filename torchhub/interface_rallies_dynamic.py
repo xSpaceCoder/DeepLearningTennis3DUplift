@@ -14,71 +14,59 @@ class UpliftingModel:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         # Initialize Architecture
-        model_path = os.path.join(
-            paths.weights_path, "rallies_dynamicAnkle", "model.pt"
-        )
+        model_path = os.path.join(paths.weights_path, "rallies_dynamic", "model.pt")
         self.model, self.transform, self.transform_mode = load_uplifting_model(
             model_path=model_path
         )
         self.model.to(self.device)
         self.model.eval()
 
-    def predict(self, ball_coords, court_courts, ankle_v, times):
+    def predict(self, ball_coords, court_courts, times):
         """
         Input:
             - ball_coords: torch tensor (N, 2) of 2D ball coordinates in pixel space
             - court_courts: torch tensor (16, 3) of 2D table keypoints in pixel space -> (x, y, visibility)
-            - ankle_v: torch tensor (1) v coordinate of the right ankle of the hitting player in pixel space
             - times: torch tensor (N,) of time stamps in seconds -> they have to match the ball coordinates
         Returns:
             - pred_spin: torch tensor (n, 3) of predicted spin vector in local coordinate system
             - pred_pos_3d: torch tensor (N, 3) of predicted 3D ball positions in world coordinates
         """
         # Prepare inputs
-        data = {"r_img": ball_coords, "court_img": court_courts, "ankle_v": ankle_v}
+        data = {
+            "r_img": ball_coords,
+            "court_img": court_courts,
+        }
         data = self.transform(data)
-        ball_coords, court_courts, ankle_v = (
-            data["r_img"],
-            data["court_img"],
-            data["ankle_v"],
-        )
+        ball_coords, court_courts = data["r_img"], data["court_img"]
 
         mask = np.zeros((ball_coords.shape[0] + 1,), dtype=np.float32)
         mask[:-1] = 1.0  # True for all ball points
 
         return self.predict_without_normalization(
-            ball_coords,
-            court_courts,
-            ankle_v,
-            torch.tensor(mask).to(self.device),
-            times,
+            ball_coords, court_courts, torch.tensor(mask).to(self.device), times
         )
 
-    def predict_without_normalization(
-        self, ball_coords, court_courts, ankle_v, mask, times
-    ):
+    def predict_without_normalization(self, ball_coords, court_courts, mask, times):
         """Assume coords are already normalized
         Input:
             - ball_coords: torch tensor (N, 2) of 2D ball coordinates in pixel space
             - court_courts: torch tensor (16, 3) of 2D court keypoints in pixel space -> (x, y, visibility)
-            - ankle_v: torch tensor (1) v coordinate of the right ankle of the hitting player in pixel space
             - mask: torch tensor (N,) of mask for ball coordinates
             - times: torch tensor (N,) of time stamps in seconds -> they have to match the ball coordinates
         Returns:
             - pred_spin: torch tensor (N, 3) of predicted spin vector in local coordinate system
             - pred_pos: torch tensor (N, 3) of predicted 3D ball positions in world coordinates
         """
-        ball_coords, court_courts, ankle_v, mask, times = (
+        ball_coords, court_courts, mask, times = (
             ball_coords.to(self.device),
             court_courts.to(self.device),
-            ankle_v.to(self.device),
             mask.to(self.device),
             times.to(self.device),
         )
 
         with torch.no_grad():
             pred_rotation, pred_position = self.model(
-                ball_coords, court_courts, mask, times, ankle_v
+                ball_coords, court_courts, mask, times
             )
 
         # transform prediction into local coordinate system

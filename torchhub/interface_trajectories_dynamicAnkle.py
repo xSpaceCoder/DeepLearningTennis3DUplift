@@ -4,7 +4,7 @@ import os
 
 # uplifting
 from torchhub.helper import load_model as load_uplifting_model
-from uplifting_rallies.helper import transform_rotationaxes
+from uplifting.helper import transform_rotationaxes
 
 import paths
 
@@ -15,7 +15,7 @@ class UpliftingModel:
 
         # Initialize Architecture
         model_path = os.path.join(
-            paths.weights_path, "rallies_dynamicAnkle", "model.pt"
+            paths.weights_path, "trajectories_dynamicAnkle", "model.pt"
         )
         self.model, self.transform, self.transform_mode = load_uplifting_model(
             model_path=model_path
