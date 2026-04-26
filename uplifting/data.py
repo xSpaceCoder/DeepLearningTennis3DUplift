@@ -3,6 +3,8 @@ import random
 import torch
 import os
 
+os.chdir("/home/mmc-user/tennisuplifting/DeepLearningTennis3DUplift")
+
 from uplifting.helper import get_Mext, cam2img, world2cam
 from uplifting.helper import HEIGHT, WIDTH, base_f
 from uplifting.helper import get_data_path

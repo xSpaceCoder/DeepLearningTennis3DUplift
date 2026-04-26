@@ -1,4 +1,7 @@
 import os
+import sys
+
+sys.path.insert(0, "/home/mmc-user/tennisuplifting/DeepLearningTennis3DUplift")
 
 if __name__ == "__main__":
     import argparse

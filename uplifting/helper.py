@@ -296,7 +296,7 @@ def get_data_path():
         return DATA_PATH_RAM
         # return os.path.join(DATA_PATH_RAM, "syntheticdata_03-04")
     else:
-        return os.path.join(DATA_PATH, "syntheticdata_03-04")
+        return os.path.join(DATA_PATH, "syntheticdata_03-04/AD-Trajectories/data/")
 
 
 def seed_worker(worker_id):

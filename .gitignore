@@ -8,3 +8,5 @@ venv
 ignore
 syntheticdataset/__init__.py
 heatmap_outputs/*
+
+trajectory.png
