@@ -13,6 +13,9 @@ The filter which trajectories to include in the heatmaps can be configured start
 
 # %%
 import os
+
+os.chdir("/home/mmc-user/tennisuplifting/DeepLearningTennis3DUplift")
+print(os.getcwd())
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -410,7 +413,7 @@ def plot_heatmaps(
     fig1, ax1 = plt.subplots(figsize=(14, 10))
     h1 = ax1.hist2d(tx, ty, bins=bins, cmap=cmap, range=[xlim, ylim], density=True)
     draw_tennis_court(ax1, view="top")
-    # ax1.set_title("Top View")
+    ax1.set_title("Top View")
     ax1.set_xlabel("Length (m)")
     ax1.set_ylabel("Width (m)")
     ax1.set_aspect("equal")
@@ -423,7 +426,7 @@ def plot_heatmaps(
     # Using specific range to match court size
     h2 = ax2.hist2d(bx, by, bins=bins, cmap=cmap, range=[xlim, ylim], density=True)
     draw_tennis_court(ax2, view="top")
-    # ax2.set_title("Bounce Density (Top View)")
+    ax2.set_title("Bounce Density (Top View)")
     ax2.set_xlabel("Length (m)")
     ax2.set_ylabel("Width (m)")
     ax2.set_aspect("equal")
@@ -434,7 +437,7 @@ def plot_heatmaps(
     fig3, ax3 = plt.subplots(figsize=(16, 6))
     h3 = ax3.hist2d(tx, tz, bins=bins, cmap=cmap, range=[xlim, zlim], density=True)
     draw_tennis_court(ax3, view="side")
-    # ax3.set_title("Side View")
+    ax3.set_title("Side View")
     ax3.set_xlabel("Length (m)")
     ax3.set_ylabel("Height (m)")
     # Use automatic aspect for the side view so the full vertical range is visible
@@ -451,7 +454,7 @@ def plot_heatmaps(
         fig4, ax4 = plt.subplots(figsize=(14, 10))
         h4 = ax4.hist2d(sx, sy, bins=bins, cmap=cmap, range=[xlim, ylim], density=True)
         draw_tennis_court(ax4, view="top")
-        # ax4.set_title("Starting Positions (Top View)")
+        ax4.set_title("Starting Positions (Top View)")
         ax4.set_xlabel("Length (m)")
         ax4.set_ylabel("Width (m)")
         ax4.set_aspect("equal")

@@ -6,3 +6,5 @@ data
 venv
 
 ignore
+syntheticdataset/__init__.py
+heatmap_outputs/*
